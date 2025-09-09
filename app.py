@@ -57,20 +57,7 @@ Base = declarative_base()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
-# Allow Lovable frontend
-origins = [
-    "https://preview--seed-the-future-app.lovable.app",
-    "https://seed-the-future-app.lovable.app",  # production version
-    "http://localhost:3000",  # optional: for local dev
-]
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,  # list of allowed origins
-    allow_credentials=True,
-    allow_methods=["*"],    # allow all HTTP methods (GET, POST, etc.)
-    allow_headers=["*"],    # allow all headers
-)
 def get_db():
     db = SessionLocal()
     try:
@@ -301,7 +288,20 @@ def admin_required(user: User = Depends(get_current_user)) -> User:
 # -----------------------------
 app = FastAPI(title="Tree Planting Donation API", version="0.1.0")
 
+# Allow Lovable frontend
+origins = [
+    "https://preview--seed-the-future-app.lovable.app",
+    "https://seed-the-future-app.lovable.app",  # production version
+    "http://localhost:3000",  # optional: for local dev
+]
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # list of allowed origins
+    allow_credentials=True,
+    allow_methods=["*"],    # allow all HTTP methods (GET, POST, etc.)
+    allow_headers=["*"],    # allow all headers
+)
 @app.on_event("startup")
 def on_startup():
     Base.metadata.create_all(bind=engine)
