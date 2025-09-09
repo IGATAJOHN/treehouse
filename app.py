@@ -37,6 +37,7 @@ from passlib.context import CryptContext
 import jwt
 import os
 import httpx
+from fastapi.middleware.cors import CORSMiddleware
 
 # -----------------------------
 # Config & DB setup
