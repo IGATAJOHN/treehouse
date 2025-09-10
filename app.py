@@ -463,7 +463,6 @@ def tree_detail(tree_id: int = Path(..., ge=1), _: User = Depends(get_current_us
         raise HTTPException(status_code=404, detail="Tree not found")
     return tree
 
-
 class MapTree(BaseModel):
     id: int
     species: str
@@ -488,10 +487,16 @@ def trees_for_map(
     q = q.order_by(Tree.created_at.desc()).limit(limit)
     rows = q.all()
     return [
-        MapTree(id=t.id, species=t.species, lat=t.latitude, lng=t.longitude, status=t.status, planting_date=t.planting_date)
+        MapTree(
+            id=t.id,
+            species=t.species,
+            lat=t.latitude,
+            lng=t.longitude,
+            status=t.status,
+            planting_date=t.planting_date,
+        )
         for t in rows
     ]
-
 
 # -----------------------------
 # Tree updates
