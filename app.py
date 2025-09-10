@@ -455,23 +455,6 @@ def trees_by_user(user_id: int = Path(..., ge=1), current: User = Depends(get_cu
         raise HTTPException(status_code=403, detail="Not allowed")
     return db.query(Tree).filter(Tree.donor_id == user_id).order_by(Tree.created_at.desc()).all()
 
-
-@app.get("/trees/{tree_id}", response_model=TreeOut)
-def tree_detail(tree_id: int = Path(..., ge=1), _: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    tree = db.get(Tree, tree_id)
-    if not tree:
-        raise HTTPException(status_code=404, detail="Tree not found")
-    return tree
-
-class MapTree(BaseModel):
-    id: int
-    species: str
-    lat: float
-    lng: float
-    status: str
-    planting_date: datetime
-
-
 @app.get("/trees/map", response_model=List[MapTree])
 def trees_for_map(
     species: Optional[str] = Query(None, description="Filter by species"),
@@ -497,6 +480,23 @@ def trees_for_map(
         )
         for t in rows
     ]
+
+@app.get("/trees/{tree_id}", response_model=TreeOut)
+def tree_detail(tree_id: int = Path(..., ge=1), _: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    tree = db.get(Tree, tree_id)
+    if not tree:
+        raise HTTPException(status_code=404, detail="Tree not found")
+    return tree
+
+class MapTree(BaseModel):
+    id: int
+    species: str
+    lat: float
+    lng: float
+    status: str
+    planting_date: datetime
+
+
 
 # -----------------------------
 # Tree updates
