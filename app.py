@@ -356,7 +356,14 @@ def login(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
 class LoginRequest(BaseModel):
     email: EmailStr
     password: str
-
+    
+class MapTree(BaseModel):
+    id: int
+    species: str
+    lat: float
+    lng: float
+    status: str
+    planting_date: datetime
 @app.post("/auth/login-json", response_model=TokenOut)
 def login_json(payload: LoginRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == payload.email).first()
