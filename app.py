@@ -293,7 +293,7 @@ app = FastAPI(title="Tree Planting Donation API", version="0.1.0")
 origins = [
     "https://preview--seed-the-future-app.lovable.app",
     "https://seed-the-future-app.lovable.app",  # production version
-    "http://localhost:3000",  # optional: for local dev
+    "http://localhost:8080",  # optional: for local dev
 ]
 
 app.add_middleware(
