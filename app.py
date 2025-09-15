@@ -294,6 +294,7 @@ origins = [
     "https://preview--seed-the-future-app.lovable.app",
     "https://seed-the-future-app.lovable.app",  # production version
     "http://localhost:8080",  # optional: for local dev
+      "http://localhost:5173",  # optional: for local dev
 ]
 
 app.add_middleware(
