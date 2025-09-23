@@ -400,7 +400,31 @@ def create_donation(payload: DonationCreate, current: User = Depends(get_current
     db.refresh(donation)
     return donation
 
+# ...existing code...
 
+@app.get("/reports/donor-impact/{user_id}")
+def donor_impact(
+    user_id: int = Path(..., ge=1),
+    current: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    # Only allow self or admin
+    if current.role != "admin" and current.id != user_id:
+        raise HTTPException(status_code=403, detail="Not allowed")
+    # Count trees linked to this user
+    trees = db.query(Tree).filter(Tree.donor_id == user_id).all()
+    num_trees = len(trees)
+    # Estimate CO₂ absorbed: 21kg/tree/year × years since planting
+    total_co2 = 0.0
+    for t in trees:
+        years = max((datetime.utcnow() - t.planting_date).days / 365.0, 0.01)
+        total_co2 += 21 * years
+    return {
+        "user_id": user_id,
+        "trees_planted": num_trees,
+        "estimated_co2_kg": round(total_co2, 2)
+    }
+# ...existing code...
 @app.get("/donations/user/{user_id}", response_model=List[DonationOut])
 def user_donations(user_id: int = Path(..., ge=1), current: User = Depends(get_current_user), db: Session = Depends(get_db)):
     if current.role != "admin" and current.id != user_id:
