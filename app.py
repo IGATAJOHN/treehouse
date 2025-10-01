@@ -295,6 +295,7 @@ origins = [
     "https://seed-the-future-app.lovable.app",  # production version
     "http://localhost:8080",  # optional: for local dev
       "http://localhost:5173",  # optional: for local dev
+    "https://mytreehouse-eosin.vercel.app",
 ]
 
 app.add_middleware(
