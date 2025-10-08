@@ -66,7 +66,8 @@ DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./dev.db")
 JWT_SECRET = os.getenv("JWT_SECRET", "dev_secret_change_me")
 JWT_ALG = os.getenv("JWT_ALG", "HS256")
 PAYSTACK_SECRET = os.getenv("PAYSTACK_SECRET", "paystack_secret_placeholder")
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
+# ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
+ACCESS_TOKEN_EXPIRE_MINUTES = 10080  # 7 days
 
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
