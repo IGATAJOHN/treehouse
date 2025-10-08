@@ -38,7 +38,27 @@ import jwt
 import os
 import httpx
 from fastapi.middleware.cors import CORSMiddleware
+# -----------------------------
+# FastAPI app
+# -----------------------------
+app = FastAPI(title="Tree Planting Donation API", version="0.1.0")
 
+# Allow Lovable frontend
+origins = [
+    "https://preview--seed-the-future-app.lovable.app",
+    "https://seed-the-future-app.lovable.app",  # production version
+    "http://localhost:8080",  # optional: for local dev
+      "http://localhost:5173",  # optional: for local dev
+    "https://mytreehouse-eosin.vercel.app",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # list of allowed origins
+    allow_credentials=True,
+    allow_methods=["*"],    # allow all HTTP methods (GET, POST, etc.)
+    allow_headers=["*"],    # allow all headers
+)
 # -----------------------------
 # Config & DB setup
 # -----------------------------
@@ -284,27 +304,7 @@ def admin_required(user: User = Depends(get_current_user)) -> User:
     return user
 
 
-# -----------------------------
-# FastAPI app
-# -----------------------------
-app = FastAPI(title="Tree Planting Donation API", version="0.1.0")
 
-# Allow Lovable frontend
-origins = [
-    "https://preview--seed-the-future-app.lovable.app",
-    "https://seed-the-future-app.lovable.app",  # production version
-    "http://localhost:8080",  # optional: for local dev
-      "http://localhost:5173",  # optional: for local dev
-    "https://mytreehouse-eosin.vercel.app",
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,  # list of allowed origins
-    allow_credentials=True,
-    allow_methods=["*"],    # allow all HTTP methods (GET, POST, etc.)
-    allow_headers=["*"],    # allow all headers
-)
 @app.on_event("startup")
 def on_startup():
     Base.metadata.create_all(bind=engine)
